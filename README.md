@@ -12,3 +12,6 @@ create .env file in script directory and write
 TOKEN = 'token of your chat group'
 ````
 send squeezed files to your group and recieve de-squeezed, enjoy.
+
+
+If you want to run it on your old android phone use Pydroid3 with desqueeze_pydroid3.py
