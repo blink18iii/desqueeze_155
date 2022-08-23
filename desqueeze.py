@@ -7,13 +7,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 try:
     BOT_TOKEN = os.getenv('TOKEN')
 except KeyError:
     BOT_TOKEN = sys.argv[1]
-
-# endpoint = f'https://api.telegram.org/bot{BOT_TOKEN}'
-# file_endpoint = f'https://api.telegram.org/file/bot{BOT_TOKEN}'
 
 
 def resize_image(path):
@@ -28,16 +26,12 @@ def resize_image(path):
     return path
 
 
-def chat_handler(msg):
+def chat(msg):
     msg_type, chat_type, chat_id = telepot.glance(msg)
 
-    if "reply_to_message" in msg and "/crop" in msg["text"]:
-        msg = msg["reply_to_message"]
-        msg_type, chat_type, chat_id = telepot.glance(msg)
-    elif msg_type not in ["document", "photo"]:
+    if msg_type not in ["document", "photo"]:
         return
 
-    # Handle compressed/uncompressed images
     if msg_type == "document":
         if msg["document"]["mime_type"] in ["image/png", "image/jpeg"]:
             file_id = msg["document"]["file_id"]
@@ -48,7 +42,7 @@ def chat_handler(msg):
     else:
         return
 
-    file_path = "downloads/" + bot.getFile(file_id)["file_path"].split("/")[1]
+    file_path = "photos/" + bot.getFile(file_id)["file_path"].split("/")[1]
 
     # Download file
     bot.download_file(file_id, file_path)
@@ -64,12 +58,12 @@ def chat_handler(msg):
 
 
 if __name__ == "__main__":
-    if not os.path.exists("downloads"):
-        os.makedirs("downloads")
+    if not os.path.exists("photos"):
+        os.makedirs("photos")
 
     # Instantiate bot
     bot = telepot.Bot(BOT_TOKEN)
 
     # New message listener
-    bot.message_loop({'chat': chat_handler},
+    bot.message_loop({'chat': chat},
                      run_forever="Bot Running...")
