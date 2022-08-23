@@ -1,4 +1,3 @@
-# create a script to choose images and desqueeze them from 1.55
 from tkinter import filedialog
 from tkinter import Tk
 from PIL import Image
