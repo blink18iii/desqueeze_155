@@ -1,11 +1,16 @@
 import os
 from PIL import Image
+import numpy as np
+import cv2
+import pillow_heif
+from pillow_heif import register_heif_opener
 import PIL
 import sys
 import telepot
 from dotenv import load_dotenv
 
 load_dotenv()
+register_heif_opener()
 
 
 try:
@@ -17,12 +22,12 @@ except KeyError:
 def resize_image(path):
     img = Image.open(path)
     width, height = img.size
-    if (width == 4032 and height == 3024) or (width == 1280 and height == 960):
-        new_image = img.resize((6250, 3024), PIL.Image.Resampling.LANCZOS)
-        new_image.save(path, quality='high')
+    if width > height:
+        new_image = img.resize((int(width * 1.55), height), PIL.Image.Resampling.LANCZOS)
+        new_image.save(path)
     else:
-        new_image = img.resize((3024, 6250), PIL.Image.Resampling.LANCZOS)
-        new_image.save(path, quality='high')
+        new_image = img.resize((width, int(height * 1.55)), PIL.Image.Resampling.LANCZOS)
+        new_image.save(path)
     return path
 
 
@@ -33,10 +38,8 @@ def chat(msg):
         return
 
     if msg_type == "document":
-        if msg["document"]["mime_type"] in ["image/png", "image/jpeg"]:
+        if msg["document"]["mime_type"] in ["image/png", "image/jpeg", "image/heic", "image/heif"]:
             file_id = msg["document"]["file_id"]
-        else:
-            return
     elif msg_type == "photo":
         file_id = msg["photo"][-1]["file_id"]
     else:

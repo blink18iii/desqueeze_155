@@ -14,11 +14,11 @@ except KeyError:
 def resize_image(path):
     img = Image.open(path)
     width, height = img.size
-    if (width == 4032 and height == 3024) or (width == 1280 and height == 960):
-        new_image = img.resize((6250, 3024), PIL.Image.ANTIALIAS)
+    if width > height:
+        new_image = img.resize((int(width * 1.55), height), PIL.Image.ANTIALIAS)
         new_image.save(path, quality='high')
     else:
-        new_image = img.resize((3024, 6250), PIL.Image.ANTIALIAS)
+        new_image = img.resize((width, int(height * 1.55)), PIL.Image.ANTIALIAS)
         new_image.save(path, quality='high')
     return path
 
