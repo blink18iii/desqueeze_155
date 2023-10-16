@@ -4,7 +4,7 @@ change width, height if you need to.
 
 hot to:
 ```
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 
 create .env file in script directory and write
