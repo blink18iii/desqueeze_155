@@ -33,10 +33,13 @@ def chat_handler(msg):
         return
 
     if msg_type == "document":
-        if msg["document"]["mime_type"] in ["image/png", "image/jpeg"]:
+        if msg["document"]["mime_type"] in [
+            "image/png",
+            "image/jpeg",
+            "image/heic",
+            "image/heif",
+        ]:
             file_id = msg["document"]["file_id"]
-        else:
-            return
     elif msg_type == "photo":
         file_id = msg["photo"][-1]["file_id"]
     else:
